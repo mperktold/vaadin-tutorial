@@ -1,7 +1,10 @@
 package it.prodata.views.gridlayout;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.router.Menu;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -11,36 +14,18 @@ import org.vaadin.lineawesome.LineAwesomeIconUrl;
 @PageTitle("Grid Layout")
 @Route("grid-layout")
 @Menu(order = 0, icon = LineAwesomeIconUrl.BORDER_ALL_SOLID)
-public class GridLayoutDemoView extends GridLayout {
+public class GridLayoutDemoView extends AppLayout {
 
     public GridLayoutDemoView() {
         setSizeFull();
-        var header = new H3("Header");
-        header.getStyle()
-            .setPadding("10px")
-            .setBorderBottom("1px solid black");
-        var sidebar = new Div("Sidebar");
-        sidebar.getStyle()
-            .setPadding("10px")
-            .setBorderRight("1px solid black");
-        var content = new Div("Content");
-        content.getStyle().setPadding("10px");
+        setTitle("Title");
+        Button btnHome = new Button("Home", VaadinIcon.HOME.create(), e -> setContent(new H4("Home")));
+        btnHome.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        Button btnAbout = new Button("About", VaadinIcon.INFO_CIRCLE.create(), e -> setContent(new H4("About")));
+        btnAbout.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        addToSideBar(btnHome, btnAbout);
+        setContent(new H4("Home"));
         var footer = new Div("Footer");
-        footer.getStyle()
-            .setPadding("10px")
-            .setBorderTop("1px solid black");
-        setGridTemplateAreas(
-            "header header",
-            "sidebar content",
-            "footer footer"
-        );
-        setGridTemplateRows("auto 1fr auto");
-        setGridTemplateColumns("200px 1fr");
-        setGridArea("header", header);
-        setGridArea("sidebar", sidebar);
-        setGridArea("content", content);
-        setGridArea("footer", footer);
-        add(header, sidebar, content, footer);
+        setFooter(footer);
     }
-
 }

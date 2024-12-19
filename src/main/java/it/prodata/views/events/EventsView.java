@@ -29,7 +29,7 @@ import org.vaadin.lineawesome.LineAwesomeIconUrl;
 @Menu(order = 0, icon = LineAwesomeIconUrl.BELL)
 public class EventsView extends VerticalLayout {
 
-    private static final String[] COLORS = new String[] {
+    private static final String[] COLORS = {
         "#00F",
         "#0F0",
         "#0FF",
@@ -38,6 +38,18 @@ public class EventsView extends VerticalLayout {
         "#FF0",
     };
 
+    private static final String[] NAMES = {
+        "James",
+        "John",
+        "William",
+        "David",
+        "Jane",
+        "Mary",
+        "Susan",
+        "Linda"
+    };
+
+    private Registration nameChangedRegistration;
     private Registration btnClickListenerRegistration;
     private Registration divDomListenersRegistration;
     private Registration shortcutListenerRegistration;
@@ -45,7 +57,7 @@ public class EventsView extends VerticalLayout {
 
     private TextField tfName;
     private Button btnSayHello;
-    private FlexLayout outerClickArea;
+	private FlexLayout outerClickArea;
     private Div stopPropagationClickArea;
     private Div continuePropagationClickArea;
     private Div hoverArea;
@@ -54,6 +66,8 @@ public class EventsView extends VerticalLayout {
         tfName = new TextField("Your name");
         btnSayHello = new Button("Say hello");
         btnSayHello.addClickShortcut(Key.ENTER);
+		Button btnRandomName = new Button(
+			"random name", e -> tfName.setValue(NAMES[(int)(Math.random() * NAMES.length)]));
 
         stopPropagationClickArea = new Div("Stop propagation");
         stopPropagationClickArea.getStyle()
@@ -79,7 +93,7 @@ public class EventsView extends VerticalLayout {
             .setBorder("1px solid black");
 
         setMargin(true);
-        HorizontalLayout horizontalLayout = new HorizontalLayout(tfName, btnSayHello);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(tfName, btnSayHello, btnRandomName);
         horizontalLayout.setAlignItems(Alignment.BASELINE);
         add(horizontalLayout, outerClickArea, hoverArea);
     }
@@ -87,6 +101,7 @@ public class EventsView extends VerticalLayout {
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         super.onAttach(attachEvent);
+        registerNameChangedListener();
         registerButtonClickListener();
         registerDivDomListeners();
         registerShortcutListener();
@@ -96,6 +111,7 @@ public class EventsView extends VerticalLayout {
     @Override
     protected void onDetach(DetachEvent detachEvent) {
         super.onDetach(detachEvent);
+        nameChangedRegistration.remove();
         btnClickListenerRegistration.remove();
         divDomListenersRegistration.remove();
         shortcutListenerRegistration.remove();
@@ -104,6 +120,10 @@ public class EventsView extends VerticalLayout {
 
     private static String randomColor() {
         return COLORS[(int)(Math.random() * COLORS.length)];
+    }
+
+    private void registerNameChangedListener() {
+        nameChangedRegistration = tfName.addValueChangeListener(e -> Notification.show("Name changed from '" + e.getOldValue() + "' to '" + e.getValue() + "' (from client: " + e.isFromClient() + ")"));
     }
 
     private void registerButtonClickListener() {
