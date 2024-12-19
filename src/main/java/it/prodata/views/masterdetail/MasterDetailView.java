@@ -1,5 +1,6 @@
 package it.prodata.views.masterdetail;
 
+import com.vaadin.flow.component.AttachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -76,25 +77,23 @@ public class MasterDetailView extends Div implements BeforeEnterObserver {
         grid.addColumn(SamplePerson::getOccupation).setHeader("Occupation").setAutoWidth(true);
         grid.addColumn(SamplePerson::getRole).setHeader("Role").setAutoWidth(true);
 
-        LitRenderer<SamplePerson> importantRenderer = LitRenderer.<SamplePerson>of(
-                "<vaadin-icon icon='vaadin:${item.icon}' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: ${item.color};'></vaadin-icon>")
-                .withProperty("icon", person -> person.isImportant() ? "check" : "minus").withProperty("color",
-                        important -> important.isImportant()
-                                ? "var(--lumo-primary-text-color)"
-                                : "var(--lumo-disabled-text-color)");
-
+        LitRenderer<SamplePerson> importantRenderer = LitRenderer
+            .<SamplePerson>of(
+            "<vaadin-icon icon='vaadin:${item.icon}' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: ${item.color};'></vaadin-icon>"
+            )
+            .withProperty("icon", person -> person.isImportant() ? "check" : "minus")
+            .withProperty("color", important -> important.isImportant()
+                ? "var(--lumo-primary-text-color)"
+                : "var(--lumo-disabled-text-color)"
+            );
         grid.addColumn(importantRenderer).setHeader("Important").setAutoWidth(true);
-
-        grid.setItems(query -> samplePersonService.list(
-                PageRequest.of(query.getPage(), query.getPageSize(), VaadinSpringDataHelpers.toSpringDataSort(query)))
-                .stream());
         grid.addThemeVariants(GridVariant.LUMO_NO_BORDER);
 
         // when a row is selected or deselected, populate form
         grid.asSingleSelect().addValueChangeListener(event -> {
-            if (event.getValue() != null) {
-                UI.getCurrent().navigate(String.format(SAMPLEPERSON_EDIT_ROUTE_TEMPLATE, event.getValue().getId()));
-            } else {
+            if (event.getValue() != null)
+				UI.getCurrent().navigate(String.format(SAMPLEPERSON_EDIT_ROUTE_TEMPLATE, event.getValue().getId()));
+			else {
                 clearForm();
                 UI.getCurrent().navigate(MasterDetailView.class);
             }
@@ -122,21 +121,21 @@ public class MasterDetailView extends Div implements BeforeEnterObserver {
 
         save.addClickListener(e -> {
             try {
-                if (this.samplePerson == null) {
-                    this.samplePerson = new SamplePerson();
-                }
+                if (this.samplePerson == null)
+					this.samplePerson = new SamplePerson();
                 binder.writeBean(this.samplePerson);
                 samplePersonService.update(this.samplePerson);
                 clearForm();
                 refreshGrid();
                 Notification.show("Data updated");
                 UI.getCurrent().navigate(MasterDetailView.class);
-            } catch (ObjectOptimisticLockingFailureException exception) {
-                Notification n = Notification.show(
-                        "Error updating the data. Somebody else has updated the record while you were making changes.");
+            }
+            catch (ObjectOptimisticLockingFailureException exception) {
+				var n = Notification.show("Error updating the data. Somebody else has updated the record while you were making changes.");
                 n.setPosition(Position.MIDDLE);
                 n.addThemeVariants(NotificationVariant.LUMO_ERROR);
-            } catch (ValidationException validationException) {
+            }
+            catch (ValidationException validationException) {
                 Notification.show("Failed to update the data. Check again that all values are valid");
             }
         });
@@ -150,16 +149,28 @@ public class MasterDetailView extends Div implements BeforeEnterObserver {
     }
 
     @Override
+    protected void onAttach(AttachEvent attachEvent) {
+        super.onAttach(attachEvent);
+        grid.setItems(
+            query -> samplePersonService.list(
+                PageRequest.of(query.getPage(), query.getPageSize(), VaadinSpringDataHelpers.toSpringDataSort(query))
+            ).stream()
+        );
+    }
+
+    @Override
     public void beforeEnter(BeforeEnterEvent event) {
         Optional<Long> samplePersonId = event.getRouteParameters().get(SAMPLEPERSON_ID).map(Long::parseLong);
         if (samplePersonId.isPresent()) {
             Optional<SamplePerson> samplePersonFromBackend = samplePersonService.get(samplePersonId.get());
-            if (samplePersonFromBackend.isPresent()) {
-                populateForm(samplePersonFromBackend.get());
-            } else {
+            if (samplePersonFromBackend.isPresent())
+				populateForm(samplePersonFromBackend.get());
+            else {
                 Notification.show(
-                        String.format("The requested samplePerson was not found, ID = %s", samplePersonId.get()), 3000,
-                        Notification.Position.BOTTOM_START);
+                    String.format("The requested samplePerson was not found, ID = %s", samplePersonId.get()),
+                    3000,
+                    Notification.Position.BOTTOM_START
+                );
                 // when a row is selected but the data is no longer available,
                 // refresh grid
                 refreshGrid();
@@ -169,10 +180,10 @@ public class MasterDetailView extends Div implements BeforeEnterObserver {
     }
 
     private Div createEditorLayout() {
-        Div editorLayoutDiv = new Div();
+		var editorLayoutDiv = new Div();
         editorLayoutDiv.setClassName("editor-layout");
 
-        Div editorDiv = new Div();
+		var editorDiv = new Div();
         editorDiv.setClassName("editor");
         editorLayoutDiv.add(editorDiv);
 
@@ -186,7 +197,7 @@ public class MasterDetailView extends Div implements BeforeEnterObserver {
     }
 
     private void createButtonLayout(Div editorLayoutDiv) {
-        HorizontalLayout buttonLayout = new HorizontalLayout();
+		var buttonLayout = new HorizontalLayout();
         buttonLayout.setClassName("button-layout");
         cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
@@ -195,7 +206,7 @@ public class MasterDetailView extends Div implements BeforeEnterObserver {
     }
 
     private Grid<SamplePerson> createGridLayout() {
-        Div wrapper = new Div(grid);
+		var wrapper = new Div(grid);
         wrapper.setClassName("grid-wrapper");
         wrapper.add(grid);
         return grid;
