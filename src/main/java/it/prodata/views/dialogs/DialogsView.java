@@ -16,7 +16,7 @@ import org.vaadin.lineawesome.LineAwesomeIconUrl;
 
 @PageTitle("Dialogs")
 @Route("dialogs")
-@Menu(order = 0, icon = LineAwesomeIconUrl.WINDOWS)
+@Menu(order = 0, icon = LineAwesomeIconUrl.WINDOW_MAXIMIZE)
 public class DialogsView extends Composite<VerticalLayout> {
 
 	private final Checkbox modal = new Checkbox("Modal");
