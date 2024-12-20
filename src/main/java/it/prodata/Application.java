@@ -1,6 +1,7 @@
 package it.prodata;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
+import com.vaadin.flow.component.page.Push;
 import com.vaadin.flow.theme.Theme;
 import it.prodata.data.SamplePersonRepository;
 import javax.sql.DataSource;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Bean;
  */
 @SpringBootApplication
 @Theme(value = "vaadin-tutorial")
+@Push
 public class Application implements AppShellConfigurator {
 
     public static void main(String[] args) {
