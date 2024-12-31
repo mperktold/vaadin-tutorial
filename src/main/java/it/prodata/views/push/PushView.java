@@ -62,6 +62,7 @@ public class PushView extends VerticalLayout {
 	}
 
 	private void runDirectly() {
+		progressBar.setVisible(true);
 		statusLabel.setText("Started");
 		// Simulating long running process...
 		try {

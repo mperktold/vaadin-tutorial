@@ -66,6 +66,7 @@ public class EventsView extends VerticalLayout {
         tfName = new TextField("Your name");
         btnSayHello = new Button("Say hello");
         btnSayHello.addClickShortcut(Key.ENTER);
+        btnSayHello.setDisableOnClick(true);
 		Button btnRandomName = new Button(
 			"random name", e -> tfName.setValue(NAMES[(int)(Math.random() * NAMES.length)]));
 
@@ -132,6 +133,7 @@ public class EventsView extends VerticalLayout {
                 Notification.show("Good bye " + tfName.getValue());
             else
                 Notification.show("Hello " + tfName.getValue());
+            e.getSource().setEnabled(true);
         });
     }
 

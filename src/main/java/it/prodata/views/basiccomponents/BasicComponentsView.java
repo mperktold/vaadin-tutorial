@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.H5;
+import com.vaadin.flow.component.html.H6;
 import com.vaadin.flow.component.html.Input;
 import com.vaadin.flow.component.html.NativeLabel;
 import com.vaadin.flow.component.html.Span;
@@ -61,7 +62,8 @@ public class BasicComponentsView extends VerticalLayout {
 			new H2("Heading 2"),
 			new H3("Heading 3"),
 			new H4("Heading 4"),
-			new H5("Heading 5")
+			new H5("Heading 5"),
+			new H6("Heading 6")
 		);
 		headings.getStyle().setBorder("1px solid black");
 		return headings;

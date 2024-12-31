@@ -82,7 +82,7 @@ public class MasterDetailView extends Div implements BeforeEnterObserver {
             "<vaadin-icon icon='vaadin:${item.icon}' style='width: var(--lumo-icon-size-s); height: var(--lumo-icon-size-s); color: ${item.color};'></vaadin-icon>"
             )
             .withProperty("icon", person -> person.isImportant() ? "check" : "minus")
-            .withProperty("color", important -> important.isImportant()
+            .withProperty("color", person -> person.isImportant()
                 ? "var(--lumo-primary-text-color)"
                 : "var(--lumo-disabled-text-color)"
             );

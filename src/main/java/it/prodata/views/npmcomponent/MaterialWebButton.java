@@ -6,6 +6,7 @@
 
 package it.prodata.views.npmcomponent;
 
+import com.vaadin.flow.component.ClickNotifier;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.HasLabel;
 import com.vaadin.flow.component.Tag;
@@ -22,7 +23,7 @@ import jakarta.validation.constraints.NotNull;
 @Tag("mwc-button")
 @NpmPackage(value = "@material/mwc-button", version = "0.27.0")
 @JsModule("@material/mwc-button/mwc-button.js")
-public class MaterialWebButton extends Component implements HasLabel {
+public class MaterialWebButton extends Component implements HasLabel, ClickNotifier<MaterialWebButton> {
 
 	public enum Type {
 		DEFAULT(null),
